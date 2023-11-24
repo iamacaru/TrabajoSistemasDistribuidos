@@ -8,13 +8,18 @@ public class Conecta4 {
     private char jugadorActual;
     private boolean gameOver;
 
-    public Conecta4(char[][] tablero, int fichasAConectar) {
-        this.tablero = tablero;
-        this.filas = tablero.length;
-        this.columnas = tablero[0].length;
+    public Conecta4(int filas, int columnas, int fichasAConectar) {
+        this.filas = filas;
+        this.columnas = columnas;
         this.fichasAConectar = fichasAConectar;
         this.jugadorActual = 'X';
         this.gameOver = false;
+        this.tablero = new char[filas][columnas];
+        for (int i = 0; i < filas; i++) {
+            for (int j = 0; j < columnas; j++) {
+                this.tablero[i][j] = ' ';
+            }
+        }
     }
 
     public void jugar() {
