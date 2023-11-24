@@ -1,10 +1,10 @@
 import java.util.Scanner;
 
 public class Conecta4 {
-    private char[][] tablero;
+    private final char[][] tablero;
     int filas;
     int columnas;
-    private int fichasAConectar;
+    private final int fichasAConectar;
     private char jugadorActual;
     private boolean gameOver;
 
@@ -48,29 +48,12 @@ public class Conecta4 {
     }
 
     public void verTablero() {
-        /*
-        String separador = "";
-        switch (this.columnas) {
-            case 8:
-                separador = "\n------------------------------------";
-                break;
-            case 9:
-                separador = "\n----------------------------------------";
-                break;
-            case 10:
-                separador = "\n---------------------------------------------";
-                break;
-            default:
-                separador = "\n--------------------------------";
-        }
-        */
         System.out.print("|");
         for (int i = 0; i < this.columnas; i++) {
             System.out.print(" " + (i+1) + " |");
         }
         System.out.println();
 
-        //System.out.println(separador);
         for (int i = 0; i < 1 + this.columnas * 4; i++) {
             System.out.print("-");
         }
@@ -84,7 +67,6 @@ public class Conecta4 {
             }
             System.out.println();
 
-            //System.out.println(separador);
             for (int j = 0; j < 1 + this.columnas * 4; j++) {
                 System.out.print("-");
             }
@@ -110,29 +92,26 @@ public class Conecta4 {
     }
 
     private void comprobarGanador() {
-        for (int row = 0; row < this.filas; row++) {
+        for (int fil = 0; fil < this.filas; fil++) {
             for (int col = 0; col < this.columnas - (this.fichasAConectar - 1); col++) {
                 switch (this.fichasAConectar) {
                     case 4:
-                        if (comprobar4Fichas(tablero[row][col], tablero[row][col + 1], tablero[row][col + 2], tablero[row][col + 3])) {
+                        if (comprobar4Fichas(tablero[fil][col], tablero[fil][col + 1], tablero[fil][col + 2], tablero[fil][col + 3])) {
                             gameOver = true;
                             return;
                         }
-                        //gameOver = tablero[row][col] != ' ' && tablero[row][col] == tablero[row][col + 1] && tablero[row][col + 1] == tablero[row][col + 2] && tablero[row][col + 2] == tablero[row][col + 3];
                         break;
                     case 5:
-                        if (comprobar5Fichas(tablero[row][col], tablero[row][col + 1], tablero[row][col + 2], tablero[row][col + 3], tablero[row][col + 4])) {
+                        if (comprobar5Fichas(tablero[fil][col], tablero[fil][col + 1], tablero[fil][col + 2], tablero[fil][col + 3], tablero[fil][col + 4])) {
                             gameOver = true;
                             return;
                         }
-                        //gameOver = tablero[row][col] != ' ' && tablero[row][col] == tablero[row][col + 1] && tablero[row][col + 1] == tablero[row][col + 2] && tablero[row][col + 2] == tablero[row][col + 3] && tablero[row][col + 3] == tablero[row][col + 4];
                         break;
                     case 6:
-                        if (comprobar6Fichas(tablero[row][col], tablero[row][col + 1], tablero[row][col + 2], tablero[row][col + 3], tablero[row][col + 4], tablero[row][col + 5])) {
+                        if (comprobar6Fichas(tablero[fil][col], tablero[fil][col + 1], tablero[fil][col + 2], tablero[fil][col + 3], tablero[fil][col + 4], tablero[fil][col + 5])) {
                             gameOver = true;
                             return;
                         }
-                        //gameOver = tablero[row][col] != ' ' && tablero[row][col] == tablero[row][col + 1] && tablero[row][col + 1] == tablero[row][col + 2] && tablero[row][col + 2] == tablero[row][col + 3] && tablero[row][col + 3] == tablero[row][col + 4] && tablero[row][col + 4] == tablero[row][col + 5];
                         break;
                 }
                 if (gameOver) {
@@ -141,29 +120,26 @@ public class Conecta4 {
             }
         }
 
-        for (int row = 0; row < this.filas - (this.fichasAConectar - 1); row++) {
+        for (int fil = 0; fil < this.filas - (this.fichasAConectar - 1); fil++) {
             for (int col = 0; col < 7; col++) {
                 switch (this.fichasAConectar) {
                     case 4:
-                        if (comprobar4Fichas(tablero[row][col], tablero[row + 1][col], tablero[row + 2][col], tablero[row + 3][col])) {
+                        if (comprobar4Fichas(tablero[fil][col], tablero[fil + 1][col], tablero[fil + 2][col], tablero[fil + 3][col])) {
                             gameOver = true;
                             return;
                         }
-                        //gameOver = tablero[row][col] != ' ' && tablero[row][col] == tablero[row + 1][col] && tablero[row + 1][col] == tablero[row + 2][col] && tablero[row + 2][col] == tablero[row + 3][col];
                         break;
                     case 5:
-                        if (comprobar5Fichas(tablero[row][col], tablero[row + 1][col], tablero[row + 2][col], tablero[row + 3][col], tablero[row + 4][col])) {
+                        if (comprobar5Fichas(tablero[fil][col], tablero[fil + 1][col], tablero[fil + 2][col], tablero[fil + 3][col], tablero[fil + 4][col])) {
                             gameOver = true;
                             return;
                         }
-                        //gameOver = tablero[row][col] != ' ' && tablero[row][col] == tablero[row + 1][col] && tablero[row + 1][col] == tablero[row + 2][col] && tablero[row + 2][col] == tablero[row + 3][col] && tablero[row + 3][col] == tablero[row + 4][col];
                         break;
                     case 6:
-                        if (comprobar6Fichas(tablero[row][col], tablero[row + 1][col], tablero[row + 2][col], tablero[row + 3][col], tablero[row + 4][col], tablero[row + 5][col])) {
+                        if (comprobar6Fichas(tablero[fil][col], tablero[fil + 1][col], tablero[fil + 2][col], tablero[fil + 3][col], tablero[fil + 4][col], tablero[fil + 5][col])) {
                             gameOver = true;
                             return;
                         }
-                        //gameOver = tablero[row][col] != ' ' && tablero[row][col] == tablero[row + 1][col] && tablero[row + 1][col] == tablero[row + 2][col] && tablero[row + 2][col] == tablero[row + 3][col] && tablero[row + 3][col] == tablero[row + 4][col] && tablero[row + 4][col] == tablero[row + 5][col];
                         break;
                 }
                 if (gameOver) {
@@ -172,29 +148,26 @@ public class Conecta4 {
             }
         }
 
-        for (int row = 0; row < this.filas - (this.fichasAConectar - 1); row++) {
+        for (int fil = 0; fil < this.filas - (this.fichasAConectar - 1); fil++) {
             for (int col = 0; col < this.columnas - (this.fichasAConectar - 1); col++) {
                 switch (this.fichasAConectar) {
                     case 4:
-                        if (comprobar4Fichas(tablero[row][col], tablero[row + 1][col + 1], tablero[row + 2][col + 2], tablero[row + 3][col + 3])) {
+                        if (comprobar4Fichas(tablero[fil][col], tablero[fil + 1][col + 1], tablero[fil + 2][col + 2], tablero[fil + 3][col + 3])) {
                             gameOver = true;
                             return;
                         }
-                        //gameOver = tablero[row][col] != ' ' && tablero[row][col] == tablero[row + 1][col + 1] && tablero[row + 1][col + 1] == tablero[row + 2][col + 2] && tablero[row + 2][col + 2] == tablero[row + 3][col + 3];
                         break;
                     case 5:
-                        if (comprobar5Fichas(tablero[row][col], tablero[row + 1][col + 1], tablero[row + 2][col + 2], tablero[row + 3][col + 3], tablero[row + 4][col + 4])) {
+                        if (comprobar5Fichas(tablero[fil][col], tablero[fil + 1][col + 1], tablero[fil + 2][col + 2], tablero[fil + 3][col + 3], tablero[fil + 4][col + 4])) {
                             gameOver = true;
                             return;
                         }
-                        //gameOver = tablero[row][col] != ' ' && tablero[row][col] == tablero[row + 1][col + 1] && tablero[row + 1][col + 1] == tablero[row + 2][col + 2] && tablero[row + 2][col + 2] == tablero[row + 3][col + 3] && tablero[row + 3][col + 3] == tablero[row + 4][col + 4];
                         break;
                     case 6:
-                        if (comprobar6Fichas(tablero[row][col], tablero[row + 1][col + 1], tablero[row + 2][col + 2], tablero[row + 3][col + 3], tablero[row + 4][col + 4], tablero[row + 5][col + 5])) {
+                        if (comprobar6Fichas(tablero[fil][col], tablero[fil + 1][col + 1], tablero[fil + 2][col + 2], tablero[fil + 3][col + 3], tablero[fil + 4][col + 4], tablero[fil + 5][col + 5])) {
                             gameOver = true;
                             return;
                         }
-                        //gameOver = tablero[row][col] != ' ' && tablero[row][col] == tablero[row + 1][col + 1] && tablero[row + 1][col + 1] == tablero[row + 2][col + 2] && tablero[row + 2][col + 2] == tablero[row + 3][col + 3] && tablero[row + 3][col + 3] == tablero[row + 4][col + 4] && tablero[row + 4][col + 4] == tablero[row + 5][col + 5];
                         break;
                 }
                 if (gameOver) {
@@ -203,29 +176,26 @@ public class Conecta4 {
             }
         }
 
-        for (int row = 0; row < this.filas - (this.fichasAConectar - 1); row++) {
+        for (int fil = 0; fil < this.filas - (this.fichasAConectar - 1); fil++) {
             for (int col = this.fichasAConectar - 1; col < this.columnas; col++) {
                 switch (this.fichasAConectar) {
                     case 4:
-                        if (comprobar4Fichas(tablero[row][col], tablero[row + 1][col - 1], tablero[row + 2][col - 2], tablero[row + 3][col - 3])) {
+                        if (comprobar4Fichas(tablero[fil][col], tablero[fil + 1][col - 1], tablero[fil + 2][col - 2], tablero[fil + 3][col - 3])) {
                             gameOver = true;
                             return;
                         }
-                        //gameOver = tablero[row][col] != ' ' && tablero[row][col] == tablero[row + 1][col - 1] && tablero[row + 1][col - 1] == tablero[row + 2][col - 2] && tablero[row + 2][col - 2] == tablero[row + 3][col - 3];
                         break;
                     case 5:
-                        if (comprobar5Fichas(tablero[row][col], tablero[row + 1][col - 1], tablero[row + 2][col - 2], tablero[row + 3][col - 3], tablero[row + 4][col - 4])) {
+                        if (comprobar5Fichas(tablero[fil][col], tablero[fil + 1][col - 1], tablero[fil + 2][col - 2], tablero[fil + 3][col - 3], tablero[fil + 4][col - 4])) {
                             gameOver = true;
                             return;
                         }
-                        //gameOver = tablero[row][col] != ' ' && tablero[row][col] == tablero[row + 1][col - 1] && tablero[row + 1][col - 1] == tablero[row + 2][col - 2] && tablero[row + 2][col - 2] == tablero[row + 3][col - 3] && tablero[row + 3][col - 3] == tablero[row + 4][col - 4];
                         break;
                     case 6:
-                        if (comprobar6Fichas(tablero[row][col], tablero[row + 1][col - 1], tablero[row + 2][col - 2], tablero[row + 3][col - 3], tablero[row + 4][col - 4], tablero[row + 5][col - 5])) {
+                        if (comprobar6Fichas(tablero[fil][col], tablero[fil + 1][col - 1], tablero[fil + 2][col - 2], tablero[fil + 3][col - 3], tablero[fil + 4][col - 4], tablero[fil + 5][col - 5])) {
                             gameOver = true;
                             return;
                         }
-                        //gameOver = tablero[row][col] != ' ' && tablero[row][col] == tablero[row + 1][col - 1] && tablero[row + 1][col - 1] == tablero[row + 2][col - 2] && tablero[row + 2][col - 2] == tablero[row + 3][col - 3] && tablero[row + 3][col - 3] == tablero[row + 4][col - 4] && tablero[row + 4][col - 4] == tablero[row + 5][col - 5];
                         break;
                 }
                 if (gameOver) {
