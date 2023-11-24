@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.List;
 
@@ -16,22 +13,31 @@ public class AtenderCliente implements Runnable {
 
     public void run() {
         try (BufferedReader entradaCliente = new BufferedReader(new InputStreamReader(cliente.getInputStream()));
-             PrintWriter salidaCliente = new PrintWriter(cliente.getOutputStream(), true)) {
+             BufferedWriter salidaCliente = new BufferedWriter(new OutputStreamWriter(cliente.getOutputStream()))) {
 
             List<Mesa> mesasDisponibles = servidor.getMesasDisponibles();
 
-            salidaCliente.println("Lista de Mesas Disponibles:");
+            salidaCliente.write("Lista de Mesas Disponibles:\n");
+            salidaCliente.flush();
             int numeroMesa = 1;
             for (Mesa mesa : mesasDisponibles) {
-                salidaCliente.println(numeroMesa + "- Mesa " + numeroMesa + ":\n" + "   Jugador 1: " + (mesa.getJugador1() != null ? mesa.getNomJugador1() : "-") +
-                        "   Jugador 2: " + (mesa.getJugador2() != null ? mesa.getNomJugador2() : "-"));
+                salidaCliente.write(numeroMesa + "- Mesa " + numeroMesa + ":\n" + "   Jugador 1: " + (mesa.getJugador1() != null ? mesa.getNomJugador1() : "-") +
+                        "   Jugador 2: " + (mesa.getJugador2() != null ? mesa.getNomJugador2() + "\n" : "-\n"));
                 numeroMesa++;
+                salidaCliente.flush();
             }
-            salidaCliente.println("Elige el número de la mesa a la que deseas unirte:");
+
+            salidaCliente.write("Para1\n");
+            salidaCliente.flush();
+
+            salidaCliente.write(mesasDisponibles.size() + "\n");
+            salidaCliente.flush();
 
             int n = 0;
             do {
-                salidaCliente.println("Ingresa el número de la mesa: ");
+                salidaCliente.write("Ingresa el número de la mesa a la que deseas unirte:\n");
+                salidaCliente.flush();
+
                 try {
                     n = Integer.parseInt(entradaCliente.readLine());
                 } catch (NumberFormatException e) {
@@ -41,6 +47,17 @@ public class AtenderCliente implements Runnable {
             Mesa mesaElegida = mesasDisponibles.get(n - 1);
 
             servidor.agregarJugadorAMesa(cliente, mesaElegida);
+
+            salidaCliente.write("Te has unido a la mesa " + n + "\n");
+            salidaCliente.flush();
+
+            salidaCliente.write("Para2\n");
+            salidaCliente.flush();
+
+            if (mesaElegida.hayEspacio()) {
+                salidaCliente.write("Esperando a que alguien más se una.\n");
+                salidaCliente.flush();
+            }
 
             // Completar
 
