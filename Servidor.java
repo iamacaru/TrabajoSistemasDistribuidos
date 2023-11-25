@@ -34,21 +34,16 @@ public class Servidor {
         return mesasDisponibles;
     }
 
-    public void agregarJugadorAMesa(Socket cliente, Mesa mesa) {
-        mesa.agregarJugador(cliente);
-
-        //Completar
-
-    }
-
     public void iniciar() {
         ExecutorService pool = Executors.newCachedThreadPool();
         try (ServerSocket serverSocket = new ServerSocket(55555)) {
-            System.out.println("Servidor iniciado, esperando conexiones.");
+            System.out.println("Lobby de Conecta en X abierto");
+            System.out.println("------------------------------------------------------");
             Socket cliente;
             while (true) {
                 cliente = serverSocket.accept();
-                System.out.println("Nuevo jugador conectado");
+                System.out.println("El jugador (" + cliente.getInetAddress().getHostAddress() + "   " + cliente.getPort() + ") se ha conectado al loby");
+                System.out.println("------------------------------------------------------");
                 pool.execute(new AtenderCliente(cliente, this));
             }
         } catch (IOException e) {

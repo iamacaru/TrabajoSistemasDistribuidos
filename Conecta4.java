@@ -7,6 +7,7 @@ public class Conecta4 {
     private final int fichasAConectar;
     private char jugadorActual;
     private boolean gameOver;
+    private boolean hayGanador;
 
     public Conecta4(int filas, int columnas, int fichasAConectar) {
         this.filas = filas;
@@ -14,6 +15,8 @@ public class Conecta4 {
         this.fichasAConectar = fichasAConectar;
         this.jugadorActual = 'X';
         this.gameOver = false;
+        this.hayGanador = false;
+        
         this.tablero = new char[filas][columnas];
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
@@ -26,59 +29,74 @@ public class Conecta4 {
         Scanner scanner = new Scanner(System.in);
 
         while (!this.gameOver) {
-            verTablero();
+            System.out.print(verTablero());
+        	verTablero();
             System.out.println("Es el turno del Jugador " + this.jugadorActual);
-            System.out.print("Ingresa la columna: ");
 
-            int columna = scanner.nextInt() - 1;
+            int columna = 0;
+            do {
+            	System.out.print("Ingresa la columna: ");
 
-            if (movimientoValido(columna)) {
-                colocarFicha(columna);
-                comprobarGanador();
-                if (!this.gameOver) {
-                    cambiarJugador();
+                try {
+                	columna = Integer.parseInt(scanner.nextLine()) - 1;
+                	if (!movimientoValido(columna)) {
+                		System.out.println("Movimiento no válido. Intenta de nuevo.");
+                	}
+                } catch (NumberFormatException e) {
+                	columna = -1;
+                	 System.out.println("Movimiento no válido. Intenta de nuevo.");
                 }
-            } else {
-                System.out.println("Movimiento no válido. Intenta de nuevo.");
-            }
-        }
+            } while (!movimientoValido(columna));
 
-        verTablero();
-        System.out.println("¡Juego terminado! El Jugador " + this.jugadorActual + " es el ganador.");
+            colocarFicha(columna);
+            comprobarGanador();
+            if (!this.gameOver) {
+                cambiarJugador();
+            }
+            System.out.println("__________________________________________________");
+            System.out.println();
+        }
+        
+        System.out.println(verTablero());
+        if (hayGanador) {
+        	System.out.println("¡Juego terminado! El Jugador " + this.jugadorActual + " es el ganador.");
+        } else {
+        	System.out.println("¡Empate! El tablero está lleno.");
+        }
     }
 
-    public void verTablero() {
-        System.out.print("|");
+    public String verTablero() {
+    	String displayTablero = "|";
         for (int i = 0; i < this.columnas; i++) {
-            System.out.print(" " + (i+1) + " |");
+        	displayTablero += " " + (i+1) + " |";
         }
-        System.out.println();
+        displayTablero += "\n";
 
         for (int i = 0; i < 1 + this.columnas * 4; i++) {
-            System.out.print("-");
+        	displayTablero += "-";
         }
-        System.out.println();
+        displayTablero += "\n";
 
         for (int i = 0; i < filas; i++) {
-            System.out.print("|");
+        	displayTablero += "|";
             for (int j = 0; j < this.columnas; j++) {
-                System.out.print(" " + tablero[i][j] + " ");
-                System.out.print("|");
+            	displayTablero += " " + this.tablero[i][j] + " |";
             }
-            System.out.println();
+            displayTablero += "\n";
 
             for (int j = 0; j < 1 + this.columnas * 4; j++) {
-                System.out.print("-");
+            	displayTablero += "-";
             }
-            System.out.println();
+            displayTablero += "\n";
         }
+        return displayTablero;
     }
 
-    private boolean movimientoValido(int columna) {
+    public boolean movimientoValido(int columna) {
         return columna >= 0 && columna < this.columnas && this.tablero[0][columna] == ' ';
     }
 
-    private void colocarFicha(int columna) {
+    public void colocarFicha(int columna) {
         for (int i = this.filas - 1; i >= 0; i--) {
             if (this.tablero[i][columna] == ' ') {
                 this.tablero[i][columna] = this.jugadorActual;
@@ -87,29 +105,32 @@ public class Conecta4 {
         }
     }
 
-    private void cambiarJugador() {
+    public void cambiarJugador() {
         this.jugadorActual = (this.jugadorActual == 'X') ? 'O' : 'X';
     }
 
-    private void comprobarGanador() {
+    public void comprobarGanador() {
         for (int fil = 0; fil < this.filas; fil++) {
             for (int col = 0; col < this.columnas - (this.fichasAConectar - 1); col++) {
                 switch (this.fichasAConectar) {
                     case 4:
                         if (comprobar4Fichas(tablero[fil][col], tablero[fil][col + 1], tablero[fil][col + 2], tablero[fil][col + 3])) {
                             gameOver = true;
+                            hayGanador = true;
                             return;
                         }
                         break;
                     case 5:
                         if (comprobar5Fichas(tablero[fil][col], tablero[fil][col + 1], tablero[fil][col + 2], tablero[fil][col + 3], tablero[fil][col + 4])) {
                             gameOver = true;
+                            hayGanador = true;
                             return;
                         }
                         break;
                     case 6:
                         if (comprobar6Fichas(tablero[fil][col], tablero[fil][col + 1], tablero[fil][col + 2], tablero[fil][col + 3], tablero[fil][col + 4], tablero[fil][col + 5])) {
                             gameOver = true;
+                            hayGanador = true;
                             return;
                         }
                         break;
@@ -126,18 +147,21 @@ public class Conecta4 {
                     case 4:
                         if (comprobar4Fichas(tablero[fil][col], tablero[fil + 1][col], tablero[fil + 2][col], tablero[fil + 3][col])) {
                             gameOver = true;
+                            hayGanador = true;
                             return;
                         }
                         break;
                     case 5:
                         if (comprobar5Fichas(tablero[fil][col], tablero[fil + 1][col], tablero[fil + 2][col], tablero[fil + 3][col], tablero[fil + 4][col])) {
                             gameOver = true;
+                            hayGanador = true;
                             return;
                         }
                         break;
                     case 6:
                         if (comprobar6Fichas(tablero[fil][col], tablero[fil + 1][col], tablero[fil + 2][col], tablero[fil + 3][col], tablero[fil + 4][col], tablero[fil + 5][col])) {
                             gameOver = true;
+                            hayGanador = true;
                             return;
                         }
                         break;
@@ -154,18 +178,21 @@ public class Conecta4 {
                     case 4:
                         if (comprobar4Fichas(tablero[fil][col], tablero[fil + 1][col + 1], tablero[fil + 2][col + 2], tablero[fil + 3][col + 3])) {
                             gameOver = true;
+                            hayGanador = true;
                             return;
                         }
                         break;
                     case 5:
                         if (comprobar5Fichas(tablero[fil][col], tablero[fil + 1][col + 1], tablero[fil + 2][col + 2], tablero[fil + 3][col + 3], tablero[fil + 4][col + 4])) {
                             gameOver = true;
+                            hayGanador = true;
                             return;
                         }
                         break;
                     case 6:
                         if (comprobar6Fichas(tablero[fil][col], tablero[fil + 1][col + 1], tablero[fil + 2][col + 2], tablero[fil + 3][col + 3], tablero[fil + 4][col + 4], tablero[fil + 5][col + 5])) {
                             gameOver = true;
+                            hayGanador = true;
                             return;
                         }
                         break;
@@ -182,18 +209,21 @@ public class Conecta4 {
                     case 4:
                         if (comprobar4Fichas(tablero[fil][col], tablero[fil + 1][col - 1], tablero[fil + 2][col - 2], tablero[fil + 3][col - 3])) {
                             gameOver = true;
+                            hayGanador = true;
                             return;
                         }
                         break;
                     case 5:
                         if (comprobar5Fichas(tablero[fil][col], tablero[fil + 1][col - 1], tablero[fil + 2][col - 2], tablero[fil + 3][col - 3], tablero[fil + 4][col - 4])) {
                             gameOver = true;
+                            hayGanador = true;
                             return;
                         }
                         break;
                     case 6:
                         if (comprobar6Fichas(tablero[fil][col], tablero[fil + 1][col - 1], tablero[fil + 2][col - 2], tablero[fil + 3][col - 3], tablero[fil + 4][col - 4], tablero[fil + 5][col - 5])) {
                             gameOver = true;
+                            hayGanador = true;
                             return;
                         }
                         break;
@@ -205,7 +235,6 @@ public class Conecta4 {
         }
 
         if (tableroLleno()) {
-            System.out.println("¡Empate! El tablero está lleno.");
             gameOver = true;
         }
     }
@@ -231,5 +260,17 @@ public class Conecta4 {
             }
         }
         return true;
+    }
+    
+    public char getJugadorActual() {
+    	return this.jugadorActual;
+    }
+    
+    public boolean getGameOver() {
+    	return this.gameOver;
+    }
+    
+    public boolean getHayGanador() {
+    	return this.hayGanador;
     }
 }

@@ -44,10 +44,10 @@ public class Mesa {
     public void agregarJugador(Socket jugador) {
         if (jugador1 == null) {
             jugador1 = jugador;
-            nomJugador1 = jugador.getInetAddress().getHostAddress();
+            nomJugador1 = jugador.getInetAddress().getHostAddress() + "   " + jugador.getPort();
         } else if (jugador2 == null) {
             jugador2 = jugador;
-            nomJugador2 = jugador.getInetAddress().getHostAddress();
+            nomJugador2 = jugador.getInetAddress().getHostAddress() + "   " + jugador.getPort();
         }
     }
 }

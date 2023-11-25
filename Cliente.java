@@ -12,6 +12,7 @@ public class Cliente {
                 System.out.println(linea);
                 linea = input.readLine();
             }
+            
             int n = Integer.parseInt(input.readLine());
             linea = input.readLine();
             int i = 0;
@@ -22,12 +23,62 @@ public class Cliente {
                 output.write(i + "\n");
                 output.flush();
             }
+            
             linea = input.readLine();
+            boolean soyX = false;
             while (!linea.equals("Para2")) {
                 System.out.println(linea);
+                if  (linea.contains("Tú jugaras con")) {
+                	soyX = linea.contains("X");
+                }
                 linea = input.readLine();
             }
-            // Completar
+            
+            linea = input.readLine();
+            while (!linea.equals("Para3")) {
+                System.out.println(linea);
+                linea = input.readLine();
+                if (linea.contains("Es el turno de X") && soyX) {
+                	String intrCol = input.readLine();
+                    while (!linea.equals("__________________________________________________")) {
+                        System.out.println(intrCol);
+                        Scanner sc = new Scanner(System.in);
+                        i = sc.nextInt();
+                        output.write(i + "\n");
+                        output.flush();
+                        linea = input.readLine();
+                    }
+                    System.out.println(linea);
+                } else if (linea.contains("Es el turno de X")) {
+                	System.out.println(linea);
+                	linea = input.readLine();
+                	System.out.println(linea);
+                	linea = input.readLine();
+                	System.out.println(linea);
+                }
+                
+                if (linea.contains("Es el turno de O") && !soyX) {
+                	String intrCol = input.readLine();
+                    while (!linea.equals("__________________________________________________")) {
+                        System.out.println(intrCol);
+                        Scanner sc = new Scanner(System.in);
+                        i = sc.nextInt();
+                        output.write(i + "\n");
+                        output.flush();
+                        linea = input.readLine();
+                    }
+                    System.out.println(linea);
+                } else if (linea.contains("Es el turno de O")) {
+                	System.out.println(linea);
+                	linea = input.readLine();
+                	System.out.println(linea);
+                	linea = input.readLine();
+                	System.out.println(linea);
+                }
+                linea = input.readLine();
+            }
+            
+            
 
         } catch (IOException e) {
             e.printStackTrace();
