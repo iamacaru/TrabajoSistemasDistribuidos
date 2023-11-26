@@ -34,14 +34,20 @@ public class Cliente {
                 linea = input.readLine();
             }
             
-            linea = input.readLine();
+            int tamañoTablero = Integer.parseInt(input.readLine());
             while (!linea.equals("Para3")) {
-                System.out.println(linea);
+            	i = 0;
+            	while (i < tamañoTablero) {
+            		linea = input.readLine();
+            		System.out.println(linea);
+            		i++;
+            	}
                 linea = input.readLine();
                 if (linea.contains("Es el turno de X") && soyX) {
-                	String intrCol = input.readLine();
+                	System.out.println(linea);
+                	linea = input.readLine();
                     while (!linea.equals("__________________________________________________")) {
-                        System.out.println(intrCol);
+                        System.out.println(linea);
                         Scanner sc = new Scanner(System.in);
                         i = sc.nextInt();
                         output.write(i + "\n");
@@ -52,15 +58,22 @@ public class Cliente {
                 } else if (linea.contains("Es el turno de X")) {
                 	System.out.println(linea);
                 	linea = input.readLine();
+                	while (!linea.equals("El jugador X ha colocado ficha")) {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        linea = input.readLine();
+                    }
                 	System.out.println(linea);
                 	linea = input.readLine();
                 	System.out.println(linea);
-                }
-                
-                if (linea.contains("Es el turno de O") && !soyX) {
-                	String intrCol = input.readLine();
+                } else if (linea.contains("Es el turno de O") && !soyX) {
+                	System.out.println(linea);
+                	linea = input.readLine();
                     while (!linea.equals("__________________________________________________")) {
-                        System.out.println(intrCol);
+                        System.out.println(linea);
                         Scanner sc = new Scanner(System.in);
                         i = sc.nextInt();
                         output.write(i + "\n");
@@ -71,12 +84,30 @@ public class Cliente {
                 } else if (linea.contains("Es el turno de O")) {
                 	System.out.println(linea);
                 	linea = input.readLine();
+                	while (!linea.equals("El jugador O ha colocado ficha")) {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        linea = input.readLine();
+                    }
                 	System.out.println(linea);
                 	linea = input.readLine();
                 	System.out.println(linea);
                 }
                 linea = input.readLine();
             }
+            
+            i = 0;
+        	while (i < tamañoTablero) {
+        		linea = input.readLine();
+        		System.out.println(linea);
+        		i++;
+        	}
+        	
+        	linea = input.readLine();
+    		System.out.println(linea);
             
             
 

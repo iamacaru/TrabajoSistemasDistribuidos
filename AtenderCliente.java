@@ -90,20 +90,21 @@ public class AtenderCliente implements Runnable {
                 salidaCliente.flush();
             }
             
-            salidaCliente.write("------------------------------------------------------\n");
+            salidaCliente.write("______________________________________________________\n\n");
             salidaCliente.flush();
             
             salidaCliente.write("Para2\n");
             salidaCliente.flush();
             
-            boolean esXYNoO = false;
-            boolean esOYNoX = false;
+            salidaCliente.write(mesaElegida.getJuego().getTamaño() + "\n");
+            salidaCliente.flush();
+            
             while (!mesaElegida.getJuego().getGameOver()) {
-            	salidaCliente.write(mesaElegida.getJuego().verTablero() + "\n");
+            	salidaCliente.write(mesaElegida.getJuego().verTablero());
                 salidaCliente.flush();
                 salidaCliente.write("Es el turno de " + mesaElegida.getJuego().getJugadorActual() + "\n");
                 salidaCliente.flush();
-                if (mesaElegida.getNomJugador1().equals(cliente.getInetAddress().getAddress() + "   " + cliente.getPort()) && mesaElegida.getJuego().getJugadorActual() == 'X') {
+                if (mesaElegida.getNomJugador1().equals(cliente.getInetAddress().getHostAddress() + "   " + cliente.getPort()) && mesaElegida.getJuego().getJugadorActual() == 'X') {
                 	int columna = 0;
                     do {
                     	salidaCliente.write("Ingresa la columna:\n");
@@ -128,17 +129,33 @@ public class AtenderCliente implements Runnable {
                     }
                     salidaCliente.write("__________________________________________________\n\n");
                     salidaCliente.flush();
-                    esXYNoO = true;
-                }
-                if (mesaElegida.getNomJugador2().equals(cliente.getInetAddress().getAddress() + "   " + cliente.getPort()) && esXYNoO) {
+                    mesaElegida.getJuego().setSeHaJugado(true);
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                } else if (mesaElegida.getNomJugador2().equals(cliente.getInetAddress().getHostAddress() + "   " + cliente.getPort()) && mesaElegida.getJuego().getJugadorActual() == 'X') {
+                	salidaCliente.write("Todavia no\n");
+                    salidaCliente.flush();
+                    int i = 0;
+                	while (!mesaElegida.getJuego().getSeHaJugado()) {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        salidaCliente.write("Todavia no " + i + "\n");
+                        salidaCliente.flush();
+                        i++;
+                    }
+                	mesaElegida.getJuego().setSeHaJugado(false);
+                	
                 	salidaCliente.write("El jugador X ha colocado ficha\n");
                     salidaCliente.flush();
                     salidaCliente.write("__________________________________________________\n\n");
                     salidaCliente.flush();
-                    esXYNoO = false;
-                }
-                
-                if (mesaElegida.getNomJugador2().equals(cliente.getInetAddress().getAddress() + "   " + cliente.getPort()) && mesaElegida.getJuego().getJugadorActual() == 'O') {
+                } else if (mesaElegida.getNomJugador2().equals(cliente.getInetAddress().getHostAddress() + "   " + cliente.getPort()) && mesaElegida.getJuego().getJugadorActual() == 'O') {
                 	int columna = 0;
                     do {
                     	salidaCliente.write("Ingresa la columna:\n");
@@ -163,16 +180,37 @@ public class AtenderCliente implements Runnable {
                     }
                     salidaCliente.write("__________________________________________________\n\n");
                     salidaCliente.flush();
-                    esOYNoX = true;
-                }
-                if (mesaElegida.getNomJugador1().equals(cliente.getInetAddress().getAddress() + "   " + cliente.getPort()) && esOYNoX) {
+                    mesaElegida.getJuego().setSeHaJugado(true);
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                } else if (mesaElegida.getNomJugador1().equals(cliente.getInetAddress().getHostAddress() + "   " + cliente.getPort()) && mesaElegida.getJuego().getJugadorActual() == 'O') {
+                	salidaCliente.write("Todavia no\n");
+                    salidaCliente.flush();
+                    int i = 0;
+                	while (!mesaElegida.getJuego().getSeHaJugado()) {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        salidaCliente.write("Todavia no " + i + "\n");
+                        salidaCliente.flush();
+                        i++;
+                    }
+                	mesaElegida.getJuego().setSeHaJugado(false);
+                	
                 	salidaCliente.write("El jugador O ha colocado ficha\n");
                     salidaCliente.flush();
                     salidaCliente.write("__________________________________________________\n\n");
                     salidaCliente.flush();
-                    esOYNoX = false;
                 }
             }
+            
+            salidaCliente.write("Para3\n");
+            salidaCliente.flush();
             
             salidaCliente.write(mesaElegida.getJuego().verTablero() + "\n");
             salidaCliente.flush();
@@ -183,9 +221,6 @@ public class AtenderCliente implements Runnable {
             	salidaCliente.write("¡Empate! El tablero está lleno.\n");
                 salidaCliente.flush();
             }
-            
-            salidaCliente.write("Para3\n");
-            salidaCliente.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
