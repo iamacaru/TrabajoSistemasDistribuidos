@@ -4,24 +4,23 @@ import java.util.List;
 
 public class AtenderCliente implements Runnable {
     private Socket cliente;
-    private Servidor servidor;
 
-    public AtenderCliente(Socket cliente, Servidor servidor) {
+    public AtenderCliente(Socket cliente) {
         this.cliente = cliente;
-        this.servidor = servidor;
     }
 
     public void run() {
+    	Mesa mesaElegida = null;
         try (BufferedReader entradaCliente = new BufferedReader(new InputStreamReader(cliente.getInputStream()));
              BufferedWriter salidaCliente = new BufferedWriter(new OutputStreamWriter(cliente.getOutputStream()))) {
 
-            List<Mesa> mesasDisponibles = servidor.getMesasDisponibles();
+            List<Mesa> mesasDisponibles = Servidor.getMesasDisponibles();
 
             salidaCliente.write("Lista de Mesas Disponibles:\n");
             salidaCliente.flush();
             int numeroMesa = 1;
             for (Mesa mesa : mesasDisponibles) {
-                salidaCliente.write("  " + numeroMesa + "- Mesa " + numeroMesa + ": " + mesa.getDescrripcion() + "\n" + "     Jugador 1: " + (mesa.getJugador1() != null ? mesa.getNomJugador1() : "-") +
+                salidaCliente.write("  " + numeroMesa + ".- Mesa " + numeroMesa + ": " + mesa.getDescrripcion() + "\n" + "     Jugador 1: " + (mesa.getJugador1() != null ? mesa.getNomJugador1() : "-") +
                         "   Jugador 2: " + (mesa.getJugador2() != null ? mesa.getNomJugador2() + "\n" : "-\n"));
                 numeroMesa++;
                 salidaCliente.flush();
@@ -37,17 +36,22 @@ public class AtenderCliente implements Runnable {
             salidaCliente.flush();
 
             int n = 0;
+            salidaCliente.write("Ingresa el número de la mesa a la que deseas unirte:\n");
+            salidaCliente.flush();
             do {
-                salidaCliente.write("Ingresa el número de la mesa a la que deseas unirte:\n");
-                salidaCliente.flush();
-
                 try {
                     n = Integer.parseInt(entradaCliente.readLine());
+                    if (n < 1 || n > mesasDisponibles.size()) {
+                    	salidaCliente.write("Mesa no válida. Intenta de nuevo:\n");
+                        salidaCliente.flush();
+                	}
                 } catch (NumberFormatException e) {
                     n = -1;
+                    salidaCliente.write("Mesa no válida. Intenta de nuevo:\n");
+                    salidaCliente.flush();
                 }
             } while (n < 1 || n > mesasDisponibles.size());
-            Mesa mesaElegida = mesasDisponibles.get(n - 1);
+            mesaElegida = mesasDisponibles.get(n - 1);
             
             mesaElegida.agregarJugador(cliente);
             
@@ -90,7 +94,7 @@ public class AtenderCliente implements Runnable {
                 salidaCliente.flush();
             }
             
-            salidaCliente.write("______________________________________________________\n\n");
+            salidaCliente.write("______________________________________________________\n");
             salidaCliente.flush();
             
             salidaCliente.write("Para2\n");
@@ -106,19 +110,19 @@ public class AtenderCliente implements Runnable {
                 salidaCliente.flush();
                 if (mesaElegida.getNomJugador1().equals(cliente.getInetAddress().getHostAddress() + "   " + cliente.getPort()) && mesaElegida.getJuego().getJugadorActual() == 'X') {
                 	int columna = 0;
-                    do {
-                    	salidaCliente.write("Ingresa la columna:\n");
-                        salidaCliente.flush();
-
+                	salidaCliente.write("Ingresa la columna:\n");
+                    salidaCliente.flush();
+                	do {
                         try {
                         	columna = Integer.parseInt(entradaCliente.readLine()) - 1;
                         	if (!mesaElegida.getJuego().movimientoValido(columna)) {
-                        		salidaCliente.write("Movimiento no válido. Intenta de nuevo.\n");
+                        		salidaCliente.write("Movimiento no válido. Intenta de nuevo:\n");
                                 salidaCliente.flush();
                         	}
                         } catch (NumberFormatException e) {
                         	columna = -1;
-                        	System.out.println("Movimiento no válido. Intenta de nuevo.");
+                        	salidaCliente.write("Movimiento no válido. Intenta de nuevo:\n");
+                            salidaCliente.flush();
                         }
                     } while (!mesaElegida.getJuego().movimientoValido(columna));
                     
@@ -127,11 +131,11 @@ public class AtenderCliente implements Runnable {
                     if (!mesaElegida.getJuego().getGameOver()) {
                     	mesaElegida.getJuego().cambiarJugador();
                     }
-                    salidaCliente.write("__________________________________________________\n\n");
+                    salidaCliente.write("__________________________________________________\n");
                     salidaCliente.flush();
                     mesaElegida.getJuego().setSeHaJugado(true);
                     try {
-                        Thread.sleep(2000);
+                        Thread.sleep(1100);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -153,23 +157,23 @@ public class AtenderCliente implements Runnable {
                 	
                 	salidaCliente.write("El jugador X ha colocado ficha\n");
                     salidaCliente.flush();
-                    salidaCliente.write("__________________________________________________\n\n");
+                    salidaCliente.write("__________________________________________________\n");
                     salidaCliente.flush();
                 } else if (mesaElegida.getNomJugador2().equals(cliente.getInetAddress().getHostAddress() + "   " + cliente.getPort()) && mesaElegida.getJuego().getJugadorActual() == 'O') {
                 	int columna = 0;
-                    do {
-                    	salidaCliente.write("Ingresa la columna:\n");
-                        salidaCliente.flush();
-
+                	salidaCliente.write("Ingresa la columna:\n");
+                    salidaCliente.flush();
+                	do {
                         try {
                         	columna = Integer.parseInt(entradaCliente.readLine()) - 1;
                         	if (!mesaElegida.getJuego().movimientoValido(columna)) {
-                        		salidaCliente.write("Movimiento no válido. Intenta de nuevo.\n");
+                        		salidaCliente.write("Movimiento no válido. Intenta de nuevo:\n");
                                 salidaCliente.flush();
                         	}
                         } catch (NumberFormatException e) {
                         	columna = -1;
-                        	System.out.println("Movimiento no válido. Intenta de nuevo.");
+                        	salidaCliente.write("Movimiento no válido. Intenta de nuevo:\n");
+                            salidaCliente.flush();
                         }
                     } while (!mesaElegida.getJuego().movimientoValido(columna));
                     
@@ -178,11 +182,11 @@ public class AtenderCliente implements Runnable {
                     if (!mesaElegida.getJuego().getGameOver()) {
                     	mesaElegida.getJuego().cambiarJugador();
                     }
-                    salidaCliente.write("__________________________________________________\n\n");
+                    salidaCliente.write("__________________________________________________\n");
                     salidaCliente.flush();
                     mesaElegida.getJuego().setSeHaJugado(true);
                     try {
-                        Thread.sleep(2000);
+                        Thread.sleep(1100);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -204,7 +208,7 @@ public class AtenderCliente implements Runnable {
                 	
                 	salidaCliente.write("El jugador O ha colocado ficha\n");
                     salidaCliente.flush();
-                    salidaCliente.write("__________________________________________________\n\n");
+                    salidaCliente.write("__________________________________________________\n");
                     salidaCliente.flush();
                 }
             }
@@ -223,6 +227,15 @@ public class AtenderCliente implements Runnable {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+        	if (mesaElegida != null) {
+        		try {
+    				Thread.sleep(2000);
+    			} catch (InterruptedException e) {
+    				e.printStackTrace();
+    			}
+        		mesaElegida.reiniciarMesa();
+        	}
         }
     }
 }

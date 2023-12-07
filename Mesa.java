@@ -1,7 +1,7 @@
 import java.net.Socket;
 
 public class Mesa {
-    private Conecta4 juego;
+    private ConectaX juego;
     private Socket jugador1;
     private Socket jugador2;
     private String nomJugador1;
@@ -9,11 +9,13 @@ public class Mesa {
     private String descripcion;
 
     public Mesa(int filas, int columnas, int fichasAConectar) {
-        this.juego = new Conecta4(filas, columnas, fichasAConectar);
+        this.juego = new ConectaX(filas, columnas, fichasAConectar);
+        this.nomJugador1 = "";
+        this.nomJugador2 = "";
         this.descripcion = filas + "x" + columnas + " (conecta " + fichasAConectar + ")";
     }
 
-    public Conecta4 getJuego() {
+    public ConectaX getJuego() {
         return juego;
     }
 
@@ -49,5 +51,13 @@ public class Mesa {
             jugador2 = jugador;
             nomJugador2 = jugador.getInetAddress().getHostAddress() + "   " + jugador.getPort();
         }
+    }
+    
+    public void reiniciarMesa() {
+    	this.juego.reiniciarConectaX();
+        this.jugador1 = null;
+        this.jugador2 = null;
+        this.nomJugador1 = "";
+        this.nomJugador2 = "";
     }
 }

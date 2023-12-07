@@ -1,17 +1,17 @@
 import java.util.Scanner;
 
-public class Conecta4 {
-    private final char[][] tablero;
-    int tamaño;
-    int filas;
-    int columnas;
-    private final int fichasAConectar;
+public class ConectaX {
+    private char[][] tablero;
+    private int tamaño;
+    private int filas;
+    private int columnas;
+    private int fichasAConectar;
     private char jugadorActual;
     private boolean gameOver;
     private boolean hayGanador;
     private boolean seHaJugado;
 
-    public Conecta4(int filas, int columnas, int fichasAConectar) {
+    public ConectaX(int filas, int columnas, int fichasAConectar) {
         this.filas = filas;
         this.columnas = columnas;
         this.fichasAConectar = fichasAConectar;
@@ -285,7 +285,22 @@ public class Conecta4 {
     public boolean getSeHaJugado() {
     	return this.seHaJugado;
     }
+    
     public void setSeHaJugado(boolean v) {
     	this.seHaJugado = v;
+    }
+    
+    public void reiniciarConectaX() {
+    	this.jugadorActual = 'X';
+        this.gameOver = false;
+        this.hayGanador = false;
+        this.seHaJugado = false;
+        
+        this.tablero = new char[this.filas][this.columnas];
+        for (int i = 0; i < this.filas; i++) {
+            for (int j = 0; j < this.columnas; j++) {
+                this.tablero[i][j] = ' ';
+            }
+        }
     }
 }
