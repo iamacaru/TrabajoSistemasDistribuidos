@@ -23,6 +23,7 @@ public class Servidor {
         mesas.add(new Mesa(10, 10, 6));
         
         ExecutorService pool = Executors.newCachedThreadPool();
+        
         try (ServerSocket serverSocket = new ServerSocket(55555)) {
             System.out.println("Lobby de Conecta en X abierto");
             System.out.println("------------------------------------------------------");
@@ -42,7 +43,7 @@ public class Servidor {
         } finally {
         	pool.shutdown();
         }
-    }
+    } 
     
     public static List<Mesa> getMesasDisponibles() {
         List<Mesa> mesasDisponibles = new ArrayList<>();

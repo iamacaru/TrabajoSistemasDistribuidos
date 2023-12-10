@@ -10,7 +10,7 @@ public class ConectaX {
     private boolean gameOver;
     private boolean hayGanador;
     private boolean seHaJugado;
-
+    
     public ConectaX(int filas, int columnas, int fichasAConectar) {
         this.filas = filas;
         this.columnas = columnas;
@@ -28,7 +28,8 @@ public class ConectaX {
             }
         }
     }
-
+    
+    // Método para probar la clase
     public void jugar() {
         Scanner scanner = new Scanner(System.in);
 
@@ -69,6 +70,7 @@ public class ConectaX {
         }
     }
 
+    // Devuelve un String con el tablero
     public String verTablero() {
     	String displayTablero = "|";
         for (int i = 0; i < this.columnas; i++) {
@@ -96,10 +98,12 @@ public class ConectaX {
         return displayTablero;
     }
 
+    // Devuelve un booleano que determina si un movimiento es válido
     public boolean movimientoValido(int columna) {
         return columna >= 0 && columna < this.columnas && this.tablero[0][columna] == ' ';
     }
 
+    // Coloca la ficha en la columna indicada
     public void colocarFicha(int columna) {
         for (int i = this.filas - 1; i >= 0; i--) {
             if (this.tablero[i][columna] == ' ') {
@@ -109,10 +113,12 @@ public class ConectaX {
         }
     }
 
+    // Cambia el turno
     public void cambiarJugador() {
         this.jugadorActual = (this.jugadorActual == 'X') ? 'O' : 'X';
     }
 
+    // Comprueba si el tablero contiene algúna combinación ganadora de fichas
     public void comprobarGanador() {
         for (int fil = 0; fil < this.filas; fil++) {
             for (int col = 0; col < this.columnas - (this.fichasAConectar - 1); col++) {
@@ -242,7 +248,8 @@ public class ConectaX {
             gameOver = true;
         }
     }
-
+    
+    // Metodo auxiliares de comprobarGanador()
     private boolean comprobar4Fichas(char a, char b, char c, char d) {
         return a != ' ' && a == b && b == c && c == d;
     }
@@ -266,6 +273,7 @@ public class ConectaX {
         return true;
     }
     
+    // Varios gets
     public int getTamaño() {
     	return this.tamaño;
     }
@@ -286,10 +294,12 @@ public class ConectaX {
     	return this.seHaJugado;
     }
     
+    // Un set para saber si el jugador del turno actual ha jugado
     public void setSeHaJugado(boolean v) {
     	this.seHaJugado = v;
     }
     
+    // Reinicia el tablero
     public void reiniciarConectaX() {
     	this.jugadorActual = 'X';
         this.gameOver = false;
