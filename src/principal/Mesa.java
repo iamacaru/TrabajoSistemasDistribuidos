@@ -1,3 +1,5 @@
+package principal;
+
 import java.net.Socket;
 
 public class Mesa {
